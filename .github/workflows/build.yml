@@ -7,12 +7,30 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - name: Windows
+            os: windows-latest
+
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build status
-        run: |
-          echo "This workflow is a placeholder."
-          echo "Configure the official Geode SDK setup/build action for the target GD version."
+      - name: Build Mod
+        uses: geode-sdk/build-geode-mod@main
+        with:
+          # Если вы хотите собирать только под Windows, этого достаточно.
+          # Экшен сам автоматически вызовет cmake, соберет проект и создаст .geode файл.
+          build-config: Release
+
+      # Этот шаг автоматически найдет созданный .geode файл и прикрепит его в Артефакты
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: geode-mod-windows
+          path: build/*.geode
