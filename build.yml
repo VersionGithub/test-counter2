@@ -1,0 +1,18 @@
+name: Build Geode mod
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build status
+        run: |
+          echo "This workflow is a placeholder."
+          echo "Configure the official Geode SDK setup/build action for the target GD version."
